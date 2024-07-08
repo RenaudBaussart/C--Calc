@@ -38,7 +38,10 @@ double Divide(double valueA, double valueB)
 {
     return valueA / valueB;
 }
-
+double Modulo(double valueA, double valueB)
+{
+    return valueA % valueB;
+}
 double operationHandler(List<string> operationToHandle)
 {
     double totalOutput;
@@ -47,9 +50,9 @@ double operationHandler(List<string> operationToHandle)
     {
         if(i % 2 != 0)
         {
-            int parseout;
+            double parseout;
             bool parseBool;
-            parseBool = int.TryParse(operationToHandle[i + 1], out parseout);
+            parseBool = double.TryParse(operationToHandle[i + 1], out parseout);
             if (!parseBool)
             {
                 Console.BackgroundColor = ConsoleColor.Red;
@@ -57,7 +60,7 @@ double operationHandler(List<string> operationToHandle)
                 Console.BackgroundColor = ConsoleColor.Black;
                 continue;
             }
-            parseBool = int.TryParse(operationToHandle[i - 1], out parseout);
+            parseBool = double.TryParse(operationToHandle[i - 1], out parseout);
             if (!parseBool)
             {
                 Console.BackgroundColor = ConsoleColor.Red;
@@ -69,48 +72,63 @@ double operationHandler(List<string> operationToHandle)
             {
                 if (operationToHandle[i] == "+")
                 {
-                    totalOutput = Addition(int.Parse(operationToHandle[i + 1]), int.Parse(operationToHandle[i - 1]));
+                    totalOutput = Addition(double.Parse(operationToHandle[i + 1]), double.Parse(operationToHandle[i - 1]));
                 }
                 else if(operationToHandle[i] == "-")
                 {
-                    totalOutput = Substract(int.Parse(operationToHandle[i + 1]), int.Parse(operationToHandle[i - 1]));
+                    totalOutput = Substract(double.Parse(operationToHandle[i + 1]), double.Parse(operationToHandle[i - 1]));
                 }
-                else if (operationToHandle[i] == "x")
+                else if (operationToHandle[i] == "x" || operationToHandle[i] == "X")
                 {
-                    totalOutput = Multiply(int.Parse(operationToHandle[i + 1]), int.Parse(operationToHandle[i - 1]));
+                    totalOutput = Multiply(double.Parse(operationToHandle[i + 1]), double.Parse(operationToHandle[i - 1]));
                 }
                 else if (operationToHandle[i] == "/")
                 {
-                    totalOutput = Divide(int.Parse(operationToHandle[i + 1]), int.Parse(operationToHandle[i - 1]));
+                    totalOutput = Divide(double.Parse(operationToHandle[i + 1]), double.Parse(operationToHandle[i - 1]));
+                }
+                else if (operationToHandle[i] == "%")
+                {
+                    totalOutput = Modulo(double.Parse(operationToHandle[i + 1]), double.Parse(operationToHandle[i - 1]));
                 }
             }
             else if(i > 1)
             {
                 if (operationToHandle[i] == "+")
                 {
-                    totalOutput = Addition(totalOutput, int.Parse(operationToHandle[i + 1]));
+                    totalOutput = Addition(totalOutput, double.Parse(operationToHandle[i + 1]));
                 }
                 else if (operationToHandle[i] == "-")
                 {
-                    totalOutput = Substract(totalOutput, int.Parse(operationToHandle[i + 1]));
+                    totalOutput = Substract(totalOutput, double.Parse(operationToHandle[i + 1]));
                 }
                 else if (operationToHandle[i] == "x")
                 {
-                    totalOutput = Multiply(totalOutput, int.Parse(operationToHandle[i + 1]));
+                    totalOutput = Multiply(totalOutput, double.Parse(operationToHandle[i + 1]));
                 }
                 else if (operationToHandle[i] == "/")
                 {
-                    totalOutput = Divide(totalOutput, int.Parse(operationToHandle[i + 1]));
+                    totalOutput = Divide(totalOutput, double.Parse(operationToHandle[i + 1]));
+                }
+                else if (operationToHandle[i] == "%")
+                {
+                    totalOutput = Modulo(totalOutput, double.Parse(operationToHandle[i - 1]));
                 }
             }
         }
     }
     return totalOutput;
 }
-
+void ShowList(List<string> ListToHandle)
+{
+    Console.WriteLine("--- Voici la liste des operation faite ----");
+    for(int i = 0; i < ListToHandle.Count; i++)
+    {
+        Console.WriteLine($"{ListToHandle[i]}");
+    }
+}
 bool programEnd;
 Ccolor("green");
-Console.WriteLine("Bienvenue dand votre calculatrice personelle dernier generation\n--------------------------------------------------\n-----Instruction----\nPour utilisé la Calculatrice rien de plus simple entrée simplement\\n\" +\r\n                      \" votre nombre, un espace, l'opperande, un espace , votre deuxiémme nombre puis le troisiémme....\n\npour demarer appuyer sur une touche");
+Console.WriteLine("Bienvenue dand votre calculatrice personelle dernier generation\n---------------------------------------------------------\n-----Instruction----\nPour utilisé la Calculatrice rien de plus simple entrée simplement\nvotre nombre, un espace, l'opperande, un espace , votre deuxiémme nombre puis le troisiémme....\nattention les operation se feront de gauche a droite dans l'ordre\n\npour demarer appuyer sur une touche");
 Console.WriteLine("");
 Console.ReadKey();
 programEnd = false;
@@ -124,8 +142,8 @@ do
     List<string> operationEnCours ;
     string operation;
 
-    Console.WriteLine("---- Menu principales ----\n x = Multiplication \n + = Addition\n / = division\n - = Soustraction");
-    Console.WriteLine("--Commande annexe--\n Quitter = Quitter");
+    Console.WriteLine("---- Menu principales ----\n x = Multiplication \n + = Addition\n / = division\n - = Soustraction\n % = dModulo");
+    Console.WriteLine("--Commande annexe--\n Quitter = Quitter\n Liste = Liste des précedent operation");
     Console.Write("Entrer votre operation: ");
     operation = Console.ReadLine();
     if(operation == null || operation == "")
@@ -140,11 +158,20 @@ do
     {
         Ccolor("green");
         Console.WriteLine("Au revoir");
+        programEnd = true;
+        Console.ReadKey();
+    }
+    else if (operationEnCours[0] == "Liste")
+    {
+        Ccolor("green");
+        ShowList(historiqueDesOperation);
+        Ccolor("white");
         Console.ReadKey();
     }
     else if (operationEnCours.Count >= 3)
     {
         Console.WriteLine($"Resultat : {operationHandler(operationEnCours)}");
+        historiqueDesOperation.Add($"{operation} = {operationHandler(operationEnCours)}");
         Console.ReadKey();
     }
     else if(operationEnCours.Count < 3) 
