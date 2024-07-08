@@ -16,7 +16,9 @@
 ---
 
 ### About The Project
+
 a small calc app
+
 ---
 
 ### Built With
